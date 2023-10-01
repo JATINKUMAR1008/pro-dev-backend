@@ -72,7 +72,7 @@ app.get('/repo/data', paginationMiddleware(), async(req, res) => {
     res.json({ data: data.slice(startIndex,endIndex), count: data.length });
 });
 
-app.listen(4000, () => {
+app.listen(80, () => {
     console.log("server is running")
 })
 
