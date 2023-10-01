@@ -1,0 +1,7 @@
+version: "3"
+services:
+  backend:
+    image: jatin1008/pro_dev:0.1
+    build: .
+    ports:
+      - 4000:4000
