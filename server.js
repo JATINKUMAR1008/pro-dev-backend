@@ -39,12 +39,9 @@ app.get("/getUserData", async function (req, res) {
 const paginationMiddleware = () => {
     return (req, res, next) => {
         const pageNumber = parseInt(req.query.page) || 1;
-         // Get the current page number from the query parameters
-         const pageSize = parseInt(req.query.limit) || 1
+        const pageSize = parseInt(req.query.limit) || 1
         const startIndex = (pageNumber - 1) * pageSize;
         const endIndex = startIndex + pageSize;
-
-        // Attach pagination data to the request object
         req.pagination = {
             page: pageNumber,
             limit: pageSize,
@@ -52,7 +49,7 @@ const paginationMiddleware = () => {
             endIndex
         };
 
-        next(); // Call the next middleware
+        next();
     };
 };
 app.get('/repo/data', paginationMiddleware(), async(req, res) => {
@@ -60,19 +57,17 @@ app.get('/repo/data', paginationMiddleware(), async(req, res) => {
     const {user} = req.query
     console.log(user)
     console.log(startIndex)
-    const data = await fetch(`https://api.github.com/users/${user}/repos`,{
+    await fetch(`https://api.github.com/users/${user}/repos`,{
         method:'GET',
     }).then((response)=>{
         return response.json()
     }).then((data)=>{
         console.log(data.length)
-        return data
+        res.json({ data: data.slice(startIndex,endIndex), count: data.length });
     })
-
-    res.json({ data: data.slice(startIndex,endIndex), count: data.length });
 });
 
-app.listen(80, () => {
+app.listen(4000, () => {
     console.log("server is running")
 })
 
